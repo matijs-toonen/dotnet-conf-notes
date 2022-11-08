@@ -1,5 +1,5 @@
 # Dotnet Conf Playground
 This repo contains the things I learned while watching dotnet confs each year.
 
-# Wiki
-The wiki contains the notes which I took
+# Structure
+There is a separate directory for each dotnet conf which will contain the notes which I created for that dotnet conf.
