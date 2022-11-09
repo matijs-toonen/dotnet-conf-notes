@@ -147,3 +147,29 @@ Orleans hides the service discovery when calling endpoints on other services.
 Think about calling an object which lives in an application behind a load balancer, orleans will contact the right application for you and return the response.
 ![Distributed Calls](./Resources/Orleans/DistributedCalls.png)
 ![Features](./Resources/Orleans/Features.png)
+
+# C#
+## Required Properties
+Init only properties now support the `required` keyword which will enforce the user to set the value of the property through the object initializer.
+Can even be used on properties of an `Attribute`.
+Required is inherited by default and is still required on child classes.
+It is possible to ignore `required` properties **ONLY** when setting a `SetsRequiredAttribute` on a constructor which then will fill in all the required properties.
+
+## Static Abstract Members on Interfaces
+`static abstract` members enforce the implementors of the interface to implement this static member in their own way.
+This can even be done on operators like the `+` operator. Great example of this use case is the `IAdditionOperators` interface which enforces the `+` operator on any number (double, int, etc.)
+Overloading a checked version of your operator is supported by simply adding the `checked` keyword to your method signature.
+![Static Abstract Interface Members](./Resources/C%23/Compiler/StaticOperators.png)
+
+## Performance
+Detailed blog about all the improvements can be found here:
+[.NET 7 Improvements](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/)
+
+### On-Stack Replacement (OSR)
+Loop iterations are now tracked for the tiered compilation, this is on by default.
+This means that loops which previously did not get any tiered compilation to improve the throughput will now on the fly improve the method code when the Jitter hits the compilation tier threshhold.
+![On-Stack Replacement](./Resources/C%23/Compiler/OnStackReplacement.png)
+
+## File Scoped Classes
+Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
+The `file` keyword results in the class only being available within that file.
