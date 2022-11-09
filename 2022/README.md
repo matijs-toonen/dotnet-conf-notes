@@ -93,3 +93,57 @@ WebAssembly now supports SIMD via the already existing apis
 ### Multithreading [ALPHA]
 Not supported out of the box, but can be configured to be used. **NOT PRODUCTION READY**
 
+# Azure
+## Container Apps
+Azure Container apps are container images running in a cluster. These containers are running on Kubernetes in the background, but do not require Kubernetes configuration.
+
+### Possibilities
+![Possibilities](./Resources/Azure/ContainerApps/Possibilities.png)
+![Features](./Resources/Azure/ContainerApps/Features.png)
+
+### Ingress
+Configuring Ingress:
+![Enable Ingress](./Resources/Azure/ContainerApps/IngressRules.png)
+
+### Dapr
+Enabling Dapr requires a in Azure Configuration:
+![Enable Dapr](./Resources/Azure/ContainerApps/EnableDapr.png)
+Using Dapr requires a request header to be set:
+![Dapr Headers](./Resources/Azure/ContainerApps/UseDapr.png)
+Dapr also integrates with Application Insights which will automatically collect logs and traces.
+
+### Container Apps vs Azure Kubernetes Service
+Container apps runs on top of Kubernetes, but provides a bunch of abstractions so you as a developer don't have to worry about the infrastructure yourself.
+You still get alot of capabilties of running your app in Kubernetes.
+
+#### Rule of Thumb
+If you don't wanna manage the infrastructure, you can start with Container Apps.
+When you later on need to have more control you can easily switch to Kubernetes as the things that Container Apps support like Dapr, Ingress, etc.
+are all supported in Kubernetes.
+Moving from Kubernetes to Container Apps for the other way around is also possible.
+
+## CDN for Blob Storage
+It is possible to create a CDN for the Blob Storage which will serve all the files within the Blob Storage via the Azure CDN
+
+## App Configuration
+Using `Microsoft.Azure.AppConfig` nuget package will allow the usage of the `App Configuration` for this app.
+`DefaultAzureCredential` will be resolved in two different ways:
+1. When running locally, it will use the currently logged in Visual Studio user account
+2. When deployed to the Cloud, it will use the managed identity configured for that app.
+![AddAppConfiguration](./Resources/Azure/AppConfiguration/AddAppConfiguration.png)
+
+## Azure Functions
+Isolated process is now completely decoupled from the host and will from now on allow any runtime version as long as Azure supports it.
+Middleware is now also supported
+
+# MAUI
+## Blazor Hybrid
+Shell can be used to add native navigation based on the environment your app is currently running on.
+[AirQualityApp](https://github.com/jamesmontemagno/Airqualityapps)
+
+# Orleans
+Framework for `horizontally` scaling your ASP.NET Core application.
+Orleans hides the service discovery when calling endpoints on other services. 
+Think about calling an object which lives in an application behind a load balancer, orleans will contact the right application for you and return the response.
+![Distributed Calls](./Resources/Orleans/DistributedCalls.png)
+![Features](./Resources/Orleans/Features.png)
