@@ -309,9 +309,41 @@ The following steps enable swagger for the Json Transcoded methods:
 gRPC is now supported on Azure App Service.
 This is done by replacing the existing proxy with a YARP proxy that supports gRPC out of the box (built on dotnet).
 
+# NativeAOT
+Compiling C# to an AOT exe will lose features like dynamic code e.g. Reflection or Assembly loading.
+It will however have a lower memory usage, faster startup time, and better native interopability
+
+Information is interesting, but to hard to explain.
+Full video can be found here: [Video TODO](youtube.com/)
+Session: ![Session](./Resources/C%23/AOT/Session.png)
+
+# Microservices
+## Authentication / Authorization
+
+Very interesting, but to hard to explain.
+Full video can be found here: [Video TODO](youtube.com/)
+Session: ![Session](./Resources/Microservices/Auth/Session.png)
+
+### Important Reminders
+#### Authorization Response
+It is smart to return the permissions for the items available to the current user when returning the items you want to show.
+![Authorization In Response](./Resources/Microservices/Auth/PermissionsInResponse.png)
+
+#### Conclusion
+![Authorization Conclusion](./Resources/Microservices/Auth/Conclusion.png)
+
+#### Resources
+[Authorization in a microservices world](https://www.alexanderlolis.com/authorization-in-a-microservices-world)
+
 # TODO
 Missed sessions:
+## First Missed Sessions Chain
 Starting from:
 ![First Start](./Resources/MissedSessions/Start_1.png)
 Until:
 ![First Until](./Resources/MissedSessions/End_1.png)
+## Second Missed Sessions Chain
+Starting from:
+![Second Start](./Resources/MissedSessions/Start_2.png)
+Until:
+...
