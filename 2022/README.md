@@ -196,3 +196,115 @@ This means that loops which previously did not get any tiered compilation to imp
 ## File Scoped Classes
 Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
 The `file` keyword results in the class only being available within that file.
+
+# Github
+## Dependabot
+Using dependabot can create PR's for updating nuget package changes which will include the changelogs, commits, and release notes of all the newer versions of your nuget package.
+Dependabot can also create warnings for security vulnerabilities, which will be created as security advisories in github.
+
+## Codespaces
+Everybody gets 60 minutes of codespaces for free per month!
+
+# Microsoft Devbox
+It is possible to create a dev box setup by your IT department for specific needs and projects.
+Before creating a dev box you need to select a project and dev box pool out of the projects and hardware pools setup.
+
+This dev box will have everything needed for your project ready. Think of the following:
+1. Frontend dev pool -> Visual Studio Code, npm, etc.
+2. Backend dev pool -> Visual Studio, dotnet, etc.
+3. etc.
+
+## Auto Stop Time
+Dev box pools can be set to have an auto stop time which will automatically shut down an idle dev box,
+when the dev box is still being used the user will receive a notification about the shut down and can delay the shut down timer so the developer can continue working.
+
+## Github Integration
+It is possible to create a dev box from github actions to easily review your changes on the fly.
+
+# Low Code
+Below is a rule of thumb which will guide when to use low code and when not to use low code:
+![When To Use](./Resources/LowCode/WhenToUseLowCode.png)
+
+## Architecture
+As Power Apps or other kinds of low-code applications don't have code to execute the business logic it is recommended to create custom connectors behind the low-code applications.
+![Custom Connectors](./Resources/LowCode/CustomConnectors.png)
+
+The image above shows how to use the low-code for the frontend but execute the business logic behind the frontend in a Rest API (can be .NET).
+This way can even leverage from a microservices architecture in which you run the backend business logic as microservices.
+
+![Backend Architecture](./Resources/LowCode/MicroservicesArchitecture.png)
+
+# WinUI 3
+It is possible to create custom widgets for windows.
+Supports .NET 7 with C# 11.
+It is part of a nuget package, so you as the developer will decide when to update.
+
+## Dark / Light Mode
+Adding a new item via the `New Item (Template Studio)` option and selecting the `Settings` Page will automatically add a settings page navigation cockwheel.
+The settings page automatically adds `Dark` and `Light` theme settings. These settings will work any native components which have not been set to a color manually.
+
+## Rive Animations
+Rive Animations are awesome! The animations have properties which will show different animations based on these property values.
+
+# CoreWCF
+Possibility to create a WCF Server and Client in .NET 7
+Deployment of WCF is moved to ASP.NET Core, it is implemented as a middleware and will therefore support all the same features as ASP.NET Core does.
+
+## Dependency Injection
+CoreWCF allows your connected WCF service to be injected via dependency injection, this in turn will allow other services to be injected as dependency injected services into the connected WCF service.
+Example of this would be to inject the `ILogger` class into the connected WCF service so you can use this logger to log endpoint information.
+
+### Injected Attribute
+It is possible to get the `HttpContext` or any other DI type when the method gets called.
+There are 3 steps to enable this feature:
+1. Add a package reference to `CoreWCF.Primitives`
+2. Change the `Service` class to `partial`, this is done as the parameters do not match the interface signature and the `partial` keyword will allow code generation to create the method which matches the interface and internally call your method with the requested parameters
+3. Add the `Injected` attribute to the `parameter` which you want to be injected.
+![Dependency Injection Attribute](./Resources/WCF/DependencyInjectionAttribute.png)
+![Dependency Injection Interface](./Resources/WCF/DependencyInjectionInterface.png)
+
+## Features
+![Features](./Resources/WCF/Features.png)
+
+## Upgrade Assistant
+Upgrading WCF to CoreWCF is now supported as part of the upgrade assistant.
+
+# gRPC
+## Server Reflection
+With gRPC server reflection you can expose metadata about your gRPC contracts that are being hosted. You no longer have to share the `proto` file manually to every client when using `gRPC Server Reflection`.
+
+### Enabling Server Reflection
+There are a couple of steps you need to take before server reflection is enabled on your gRPC server:
+1. Add the `Grpc.AspNetCore.Server.Reflection` nuget package to your server project.
+2. Add the `AddGrpcReflection` method to your services.
+3. Map the `MapGrpcReflectionService` method to your app.
+![Enabling Server Reflection](./Resources/GRPC/EnablingServerReflection.png)
+
+## Postman
+Postman now supports gRPC Requests! Using [Server Reflection](#server-reflection) allows you to retrieve the metadata from your gRPC server in Postman and from there on get the endpoints.
+![Server Reflection](./Resources/GRPC/PostmanServerReflection.png)
+
+## gRPC Json Transcoding
+With Json Transcoding it is possible to expose the gRPC methods via gRPC as well as classic REST.
+The following steps enable the Json Transcoding feature:
+1. Add the `Microsoft.AspNetCore.Grpc.JsonTranscoding` nuget package to your server project.
+2. Add `AddJsonTranscoding` method to your `AddGrpc` method chain.
+3. Configure the endpoint route and type of your gRPC method on REST
+
+![Enabling Transcoding](./Resources/GRPC/EnableTranscoding.png)
+![Rest Json Transcoding](./Resources/GRPC/JsonTranscodingRoute.png)
+
+Notice that the `Name` property directly links to the `Name` property of the input type (`HelloRequest`)
+
+### Swagger
+Because Rest api's show up in swagger it is now possible to add swagger for your Rest api's.
+The following steps enable swagger for the Json Transcoded methods:
+1. Add the `Microsoft.AspNetCore.Grpc.Swagger` nuget package to your server project.
+2. Add the `AddGrpcSwagger` method to your services.
+3. Add the default `AddSwaggerUI` and `UseSwaggerUI` methods.
+
+![Enabling Swagger](./Resources/GRPC/Swagger.png)
+
+## Azure App Service
+gRPC is now supported on Azure App Service.
+This is done by replacing the existing proxy with a YARP proxy that supports gRPC out of the box (built on dotnet).
