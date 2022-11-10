@@ -93,6 +93,29 @@ WebAssembly now supports SIMD via the already existing apis
 ### Multithreading [ALPHA]
 Not supported out of the box, but can be configured to be used. **NOT PRODUCTION READY**
 
+### AOT Compilation
+Compiling your webassembly app in AOT improves the performance of the app by alot!
+
+## Playwright Testing
+Playwright is a testing framework for UI testing. It is possible to record UI steps like clicking buttons which will automatically generate test code which can be automated.
+
+### Tracing
+It is possible to look through traces made by playwright in which you can see the following information:
+1. The steps which got executed
+2. How long these steps took to execute
+3. The devtools of your browser at that point (think about console errors)
+4. A snapshot of your website at that time, so you can see what went wrong in the UI.
+
+![Playwright Tracing](./Resources/AspNet/Blazor/Playwright/PlaywrightTracing.png)
+By default Playwright creates a browser in background to perform tests, it is possible to configure that the browser should be visually launched.
+
+### Integration with MSTest
+It is possible to create unit tests with the playwright.
+Using `await Page.PauseAsync()` in the test will pause the execution to allow you as the developer to debug in the browser for issues.
+
+### Recording Playwright Steps
+![Playwright Recording](./Resources/AspNet/Blazor/Playwright/PlaywrightRecording.gif)
+
 # Azure
 ## Container Apps
 Azure Container apps are container images running in a cluster. These containers are running on Kubernetes in the background, but do not require Kubernetes configuration.
