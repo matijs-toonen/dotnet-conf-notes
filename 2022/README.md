@@ -308,3 +308,10 @@ The following steps enable swagger for the Json Transcoded methods:
 ## Azure App Service
 gRPC is now supported on Azure App Service.
 This is done by replacing the existing proxy with a YARP proxy that supports gRPC out of the box (built on dotnet).
+
+# TODO
+Missed sessions:
+Starting from:
+![First Start](./Resources/MissedSessions/Start_1.png)
+Until:
+![First Until](./Resources/MissedSessions/End_1.png)
