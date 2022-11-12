@@ -116,6 +116,27 @@ Using `await Page.PauseAsync()` in the test will pause the execution to allow yo
 ### Recording Playwright Steps
 ![Playwright Recording](./Resources/AspNet/Blazor/Playwright/PlaywrightRecording.gif)
 
+## Styling
+### Sass
+It is possible to compile sass files for Blazor projects right from the csproj file in your MSBuild commands.
+![MSBuild Sass](./Resources/AspNet/Blazor/Styling/Sass/MSBuildSass.png)
+
+### CSS
+#### CSS Isolation
+It is possible to create a CSS file which would only be applied to that single component. These CSS files are linked to the corresponding razor component based on the name with a suffix of `.css`
+e.g. `Counter.razor` would have an isolated css file named `Counter.razor.css`.
+The compiler will scope the css to only the html in the razor file based on an unique identifier generated at compile time.
+![CSS Isolation](./Resources/AspNet/Blazor/Styling/Css/CssIsolation.png)
+
+#### CSS Variables
+Creating variables is possible by using a prefix of `--` with an name of the variable and the value e.g. `--foo: #000;`. 
+This will create a variable named `--foo` and can later on be referenced using the `var` keyword e.g. `var(--foo, [fallback value])`
+It is also possible to define a scope in which this variable is set to a specific value:
+1. using `:root { --foo: #000; }` will globally set the variable `--foo` to `#000`
+2. using `.baz { --foo: #FFF; }` will set the variable of `--foo` to `#FFF` **ONLY** when it is applied on the baz class.
+![CSS Variables](./Resources/AspNet/Blazor/Styling/Css/Variables.png)
+![Scoped Variables](./Resources/AspNet/Blazor/Styling/Css/ScopedVariables.png)
+
 # Azure
 ## Container Apps
 Azure Container apps are container images running in a cluster. These containers are running on Kubernetes in the background, but do not require Kubernetes configuration.
@@ -335,11 +356,36 @@ It is smart to return the permissions for the items available to the current use
 #### Resources
 [Authorization in a microservices world](https://www.alexanderlolis.com/authorization-in-a-microservices-world)
 
+# Polyglot Notebooks
+Uses `.NET Interactive` as engine to run multiple different languages in the same interactive notebook.
+
+## Input
+It is possible to ask the user for input using the `@input:[store location]`. Store location is the location in which the data will be stored, kind of like a variable.
+In the Visual Studio Code extension you can open the values of the Polyglot notebook and where the values are currently stored
+![Current Values](./Resources/C%23/Interactive/CurrentValues.png)
+
+## Nuget packages
+Possible to use nuget packages, you need to install them first using the `#r "nuget: [package name]"` command.
+![Nuget](./Resources/C%23/Interactive/Nuget.png)
+
+## UI
+Possible to show collections in a table like manner. To do this you need to create a command which ends with a collection and uses (for C#) `.ToTabularDataResource().Display();`
+![Collection Table](./Resources/C%23/Interactive/CollectionTable.png)
+
+## Github
+Visualization for Interactive notebooks has been updated and are now supported on Github.
+It does not support scrolling when you have not outlined your code well enough
+
+## Dynamically Create Notebook Commands
+It is possible to use the kernel and generate new notebook commands while executing a command.
+The gif below generates a new `pie` command when running the `C#` command
+![Dynamic Commands](./Resources/C%23/Interactive/DynamicCommands.gif)
+
 # TODO
 Missed sessions:
 ## First Missed Sessions Chain
 Starting from:
-![First Start](./Resources/MissedSessions/Start_1.png)
+![First Start](./Resources/MissedSessions/Start_1_new.png)
 Until:
 ![First Until](./Resources/MissedSessions/End_1.png)
 ## Second Missed Sessions Chain
@@ -347,3 +393,6 @@ Starting from:
 ![Second Start](./Resources/MissedSessions/Start_2.png)
 Until:
 ...
+## OSS Spotlights
+OSS Spotlights where not shown on the main livestream and are therefore missed
+![OSS Spotlights](./Resources/MissedSessions/OSS_Spotlights.png)
