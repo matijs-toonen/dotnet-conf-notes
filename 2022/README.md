@@ -218,10 +218,10 @@ This means that loops which previously did not get any tiered compilation to imp
 Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
 The `file` keyword results in the class only being available within that file.
 
-# Github
+# GitHub
 ## Dependabot
 Using dependabot can create PR's for updating nuget package changes which will include the changelogs, commits, and release notes of all the newer versions of your nuget package.
-Dependabot can also create warnings for security vulnerabilities, which will be created as security advisories in github.
+Dependabot can also create warnings for security vulnerabilities, which will be created as security advisories in GitHub.
 
 ## Codespaces
 Everybody gets 60 minutes of codespaces for free per month!
@@ -239,8 +239,8 @@ This dev box will have everything needed for your project ready. Think of the fo
 Dev box pools can be set to have an auto stop time which will automatically shut down an idle dev box,
 when the dev box is still being used the user will receive a notification about the shut down and can delay the shut down timer so the developer can continue working.
 
-## Github Integration
-It is possible to create a dev box from github actions to easily review your changes on the fly.
+## GitHub Integration
+It is possible to create a dev box from GitHub actions to easily review your changes on the fly.
 
 # Low Code
 Below is a rule of thumb which will guide when to use low code and when not to use low code:
@@ -357,6 +357,7 @@ It is smart to return the permissions for the items available to the current use
 [Authorization in a microservices world](https://www.alexanderlolis.com/authorization-in-a-microservices-world)
 
 # Polyglot Notebooks
+Rebranding of `.NET Interactive`.
 Uses `.NET Interactive` as engine to run multiple different languages in the same interactive notebook.
 
 ## Input
@@ -372,14 +373,30 @@ Possible to use nuget packages, you need to install them first using the `#r "nu
 Possible to show collections in a table like manner. To do this you need to create a command which ends with a collection and uses (for C#) `.ToTabularDataResource().Display();`
 ![Collection Table](./Resources/C%23/Interactive/CollectionTable.png)
 
-## Github
-Visualization for Interactive notebooks has been updated and are now supported on Github.
+## GitHub
+Visualization for Interactive notebooks has been updated and are now supported on GitHub.
 It does not support scrolling when you have not outlined your code well enough
 
 ## Dynamically Create Notebook Commands
 It is possible to use the kernel and generate new notebook commands while executing a command.
 The gif below generates a new `pie` command when running the `C#` command
 ![Dynamic Commands](./Resources/C%23/Interactive/DynamicCommands.gif)
+
+# Infer#
+Infer# is a tool to do static code analysis with reasoning to find potentional bugs and or security vulnerabilities.
+Infer# will not only look at the code but also at the usages of this code on which it will base the warnings.
+![Security Vulnerabilities](./Resources/Infer%23/SecurityVulnerabilities.png)
+
+## Visual Studio
+Infer# has an `Visual Studio` and `Visual Studio Code` extension which enables you to run the Infer# analysis from your visual studio
+![Visual Studio](./Resources/Infer%23/VisualStudio.png)
+![Errors and Warnings](./Resources/Infer%23/Analysis.png)
+
+## Custom Rules
+It is possible to modify the `.inferconfig` and create custom rules which are then used when running the analysis.
+
+## DevOps Integration
+Infer# has DevOps integration and can be used together with things like GitHub Actions
 
 # TODO
 Missed sessions:
