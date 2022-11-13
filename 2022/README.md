@@ -67,6 +67,37 @@ Order is important when calling the `UseOutputCache` and `UseRateLimiter` method
 When you call `UseOutputCache` first it will not use `Rate Limiting`.
 When calling the `UseOutputCache` after the `UseRateLimiter` call it will both cache and respect the rate limiting configured
 
+## Migration 
+A new way to migrate an existing project of ASP.NET to ASP.NET Core has been added which utilises YARP.
+This is called incremental migration and works to following way:
+1. Requests directed to routes which have **NOT** yet been migrated will be forwarded to the **old** existing code running on ASP.NET
+2. Requests directed to routes which have been migrated will be handled within the YARP app as this app also includes the code.
+
+Forwarding these requests is done by YARP which stands in front of the app as reverse proxy
+![YARP Reverse Proxy](./Resources/AspNet/Migration/YarpReverseProxy.png)
+
+### Visual Studio Extension
+Using the `Microsoft Project Migrations` extension in Visual Studio will help you migrate your existing projects in Visual Studio.
+![Migration Context Menu](./Resources/AspNet/Migration/MigrationContextMenu.png)
+
+### Steps
+There are a couple of steps you can take to migrate safely from ASP.NET to ASP.NET Core.
+Because not all features from ASP.NET are available in ASP.NET Core, it is recommended to migrate in the following order to ensure the features still work.
+
+#### Preparation
+1. Migrate the project using the extension to create a new ASP.NET Core application which at that moment routes all traffic from the ASP.NET Core app to the ASP.NET app using YARP
+2. Ensure all features still work the same way
+
+#### Migrating The Code
+The following steps apply to all the code you have in your ASP.NET app and will be done repetitively.
+1. Migrate a single controller, view, or class using the extension. The extension will update the YARP rules for you.
+2. Resolve any issues for that single migrated object
+3. Test the use cases for that object
+4. Deploy
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=XQyCgwB_szI&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=48)
+
 # Docker
 ## Chiseled 
 104 MB image size
@@ -217,6 +248,27 @@ This means that loops which previously did not get any tiered compilation to imp
 ## File Scoped Classes
 Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
 The `file` keyword results in the class only being available within that file.
+
+## Interop
+New attribute called `LibraryImport`, using `LibraryImport` will use source generators to generate the code needed at compile time and not dynamically at runtime like `DllImport` does.
+This improves a couple of things:
+1. Performance as the runtime doesn't need to generate code at runtime
+2. Debugging as this code can be stepped through
+3. The generated source code is included in the stacktrace which will improve tracing
+4. Easy to create a custom variant of the generated code as you would copy and modify it and call your custom variant
+
+### DisableRuntimeMarshalling
+`DisableRuntimeMarshalling` is an attribute which needs to be assigned to the whole assembly which will guarantee that the struct will be passed as an blittable struct.
+Not that clear at the moment how this works and when to use it
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=ucNcRtnifXY&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=47)
+
+### CustomMarshaller
+Using `LibraryImport` you need to create a custom marshaller for custom types, this allows for more control over your marshalling.
+You can also specify which marshaller you want to use when converting your type to the unmanaged type, this is done via 2 ways:
+1. `NativeMarshalling` attribute on the type itself, assigning this will set this marshaller as the default marshaller for this type
+2. `MarshalUsing` attribute on the type in your method signature in the `LibraryImport`, assigning this will override the default marshaller for this type with the specified marshaller
 
 # GitHub
 ## Dependabot
@@ -397,6 +449,41 @@ It is possible to modify the `.inferconfig` and create custom rules which are th
 
 ## DevOps Integration
 Infer# has DevOps integration and can be used together with things like GitHub Actions
+
+# ML.NET
+## TorchSharp
+`TorchSharp` is a .NET library that provides access to the library that powers `PyTorch`
+![TorchSharp](./Resources/MachineLearning/TensorFlowNET.png)
+
+## TensorFlow
+You can also use `TensorFlow` in C# via `TensorFlow.NET`. TensorFlow.NET has great support for every environment.
+![TensorFlow.NET](./Resources/MachineLearning/TensorFlowNET.png)
+
+# T4
+T4 or TT files are templates for creating files mixed with C#.
+You can compare it to `Razor` files that use C# to conditionally render HTML.
+![Text Template Transformation Toolkit Example](./Resources/TextGeneration/TemplateWithOutputText.png)
+
+## Power Tools
+Using the `EF Core Power Tools` extension you can reverse engineer an existing database.
+These reverse engineered models can be turned into T4 templates.
+
+## Entity Framework 7
+Designed to be database first.
+EF 7 has perpared a couple of examples which use the T4 templates for generating multiple database contexts and models.
+Using the build in scaffold feature in Visual Studio will run the templates and generate the corresponding database contexts and models.
+
+Create or modify the existing T4 files to suit your needs.
+
+# CloudEvents
+CloudEvents is an standardised format for sending and receiving events.
+
+## Architecture
+Using the following architecture will decouple the publisher and subscribers from the broker and introduce intermediate adapters / handlers to format the data in the CloudEvents format.
+Examples of use cases: 
+1. You have a legacy publisher app that you don't want to change but you still want to use CloudEvents
+2. Reduce the complexity of the handler as the handler only receives the usefull information for it
+![Architecture](./Resources/Microservices/Events/ArchitecturePubSub.png)
 
 # TODO
 Missed sessions:
