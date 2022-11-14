@@ -111,9 +111,9 @@
   - [Entity Framework 7](#entity-framework-7)
 - [CloudEvents](#cloudevents)
   - [Architecture](#architecture-1)
+- [IOT](#iot)
 - [TODO](#todo)
   - [Missed Sessions Chain](#missed-sessions-chain)
-  - [OSS Spotlights](#oss-spotlights)
 
 # Aspnet
 ## Auth
@@ -602,6 +602,11 @@ Examples of use cases:
 2. Reduce the complexity of the handler as the handler only receives the usefull information for it
 ![Architecture](./Resources/Microservices/Events/ArchitecturePubSub.png)
 
+# IOT
+Meadow microcontrollers have full dotnet support which allows you to code your hardware components in dotnet 
+![Tempature Board](./Resources/IOT/TempatureBoard.png)
+![Code](./Resources/IOT/HardwareConnection.png)
+
 # TODO
 Missed sessions:
 ## Missed Sessions Chain
@@ -609,6 +614,3 @@ Starting from:
 ![Start](./Resources/MissedSessions/Start.png)
 Until:
 ...
-## OSS Spotlights
-OSS Spotlights where not shown on the main livestream and are therefore missed
-![OSS Spotlights](./Resources/MissedSessions/OSS_Spotlights.png)
