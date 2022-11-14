@@ -57,11 +57,12 @@
   - [Required Properties](#required-properties)
   - [Static Abstract Members on Interfaces](#static-abstract-members-on-interfaces)
   - [Performance](#performance)
+    - [Source](#source-1)
     - [On-Stack Replacement (OSR)](#on-stack-replacement-osr)
   - [File Scoped Classes](#file-scoped-classes)
   - [Interop](#interop)
     - [DisableRuntimeMarshalling](#disableruntimemarshalling)
-    - [Source](#source-1)
+    - [Source](#source-2)
     - [CustomMarshaller](#custommarshaller)
 - [GitHub](#github)
   - [Dependabot](#dependabot)
@@ -87,8 +88,10 @@
     - [Swagger](#swagger)
   - [Azure App Service](#azure-app-service)
 - [NativeAOT](#nativeaot)
+  - [Source](#source-3)
 - [Microservices](#microservices)
   - [Authentication / Authorization](#authentication--authorization)
+    - [Source](#source-4)
     - [Important Reminders](#important-reminders)
       - [Authorization Response](#authorization-response)
       - [Conclusion](#conclusion)
@@ -112,6 +115,7 @@
 - [CloudEvents](#cloudevents)
   - [Architecture](#architecture-1)
 - [IOT](#iot)
+- [Source](#source-5)
 - [TODO](#todo)
   - [Missed Sessions Chain](#missed-sessions-chain)
 
@@ -357,6 +361,9 @@ Overloading a checked version of your operator is supported by simply adding the
 Detailed blog about all the improvements can be found here:
 [.NET 7 Improvements](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/)
 
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=yNPEdaxkTZw&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=25)
+
 ### On-Stack Replacement (OSR)
 Loop iterations are now tracked for the tiered compilation, this is on by default.
 This means that loops which previously did not get any tiered compilation to improve the throughput will now on the fly improve the method code when the Jitter hits the compilation tier threshhold.
@@ -504,6 +511,8 @@ Compiling C# to an AOT exe will lose features like dynamic code e.g. Reflection 
 It will however have a lower memory usage, faster startup time, and better native interopability
 
 Information is interesting, but to hard to explain.
+
+## Source
 Full video can be found here: [Video TODO](youtube.com/)
 Session: ![Session](./Resources/C%23/AOT/Session.png)
 
@@ -511,6 +520,8 @@ Session: ![Session](./Resources/C%23/AOT/Session.png)
 ## Authentication / Authorization
 
 Very interesting, but to hard to explain.
+
+### Source
 Full video can be found here: [Video TODO](youtube.com/)
 Session: ![Session](./Resources/Microservices/Auth/Session.png)
 
@@ -606,6 +617,9 @@ Examples of use cases:
 Meadow microcontrollers have full dotnet support which allows you to code your hardware components in dotnet 
 ![Tempature Board](./Resources/IOT/TempatureBoard.png)
 ![Code](./Resources/IOT/HardwareConnection.png)
+
+# Source
+[Playlist](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn)
 
 # TODO
 Missed sessions:
