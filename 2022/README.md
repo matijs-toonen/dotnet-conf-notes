@@ -513,8 +513,7 @@ It will however have a lower memory usage, faster startup time, and better nativ
 Information is interesting, but to hard to explain.
 
 ## Source
-Full video can be found here: [Video TODO](youtube.com/)
-Session: ![Session](./Resources/C%23/AOT/Session.png)
+[Youtube Video](https://www.youtube.com/watch?v=AFDvMHETupA&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=52)
 
 # Microservices
 ## Authentication / Authorization
@@ -522,8 +521,7 @@ Session: ![Session](./Resources/C%23/AOT/Session.png)
 Very interesting, but to hard to explain.
 
 ### Source
-Full video can be found here: [Video TODO](youtube.com/)
-Session: ![Session](./Resources/Microservices/Auth/Session.png)
+[Youtube Video](https://www.youtube.com/watch?v=DVqvRZ0w-7g&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=53)
 
 ### Important Reminders
 #### Authorization Response
