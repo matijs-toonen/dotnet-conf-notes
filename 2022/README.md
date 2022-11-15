@@ -22,8 +22,20 @@
       - [Preparation](#preparation)
       - [Migrating The Code](#migrating-the-code)
     - [Source](#source)
-- [Docker](#docker)
+  - [Dynamically Adding Code](#dynamically-adding-code)
+    - [Source](#source-1)
+  - [Configuration](#configuration)
+    - [IOptions](#ioptions)
+      - [Named Configuration](#named-configuration)
+    - [Validation](#validation)
+    - [Source](#source-2)
+  - [Network Improvements](#network-improvements)
+    - [Source](#source-3)
+- [Containers](#containers)
   - [Chiseled](#chiseled)
+    - [Rootless](#rootless)
+      - [Without Chiseled Images](#without-chiseled-images)
+    - [Source](#source-4)
 - [Blazor](#blazor)
   - [Custom Component](#custom-component)
   - [Progress Bar](#progress-bar)
@@ -50,6 +62,9 @@
   - [CDN for Blob Storage](#cdn-for-blob-storage)
   - [App Configuration](#app-configuration)
   - [Azure Functions](#azure-functions)
+    - [Durable Functions](#durable-functions)
+      - [Exception Handling](#exception-handling)
+        - [Source](#source-5)
 - [MAUI](#maui)
   - [Blazor Hybrid](#blazor-hybrid)
 - [Orleans](#orleans)
@@ -57,12 +72,16 @@
   - [Required Properties](#required-properties)
   - [Static Abstract Members on Interfaces](#static-abstract-members-on-interfaces)
   - [Performance](#performance)
-    - [Source](#source-1)
+    - [Static Lambdas](#static-lambdas)
+      - [Before](#before)
+      - [After](#after)
+      - [Performance Difference](#performance-difference)
     - [On-Stack Replacement (OSR)](#on-stack-replacement-osr)
+    - [Source](#source-6)
   - [File Scoped Classes](#file-scoped-classes)
   - [Interop](#interop)
     - [DisableRuntimeMarshalling](#disableruntimemarshalling)
-    - [Source](#source-2)
+    - [Source](#source-7)
     - [CustomMarshaller](#custommarshaller)
 - [GitHub](#github)
   - [Dependabot](#dependabot)
@@ -88,10 +107,10 @@
     - [Swagger](#swagger)
   - [Azure App Service](#azure-app-service)
 - [NativeAOT](#nativeaot)
-  - [Source](#source-3)
+  - [Source](#source-8)
 - [Microservices](#microservices)
   - [Authentication / Authorization](#authentication--authorization)
-    - [Source](#source-4)
+    - [Source](#source-9)
     - [Important Reminders](#important-reminders)
       - [Authorization Response](#authorization-response)
       - [Conclusion](#conclusion)
@@ -115,7 +134,18 @@
 - [CloudEvents](#cloudevents)
   - [Architecture](#architecture-1)
 - [IOT](#iot)
-- [Source](#source-5)
+- [ComputeSharp](#computesharp)
+  - [Performance](#performance-1)
+- [Database](#database)
+  - [EF 7](#ef-7)
+    - [Execute Extensions](#execute-extensions)
+      - [UpdateAsync](#updateasync)
+      - [DeleteAsync](#deleteasync)
+    - [Source](#source-10)
+  - [Graph](#graph)
+    - [Dropping Data](#dropping-data)
+      - [Note](#note)
+- [Source](#source-11)
 - [TODO](#todo)
   - [Missed Sessions Chain](#missed-sessions-chain)
 
@@ -219,9 +249,78 @@ The following steps apply to all the code you have in your ASP.NET app and will 
 ### Source
 [Youtube Video](https://www.youtube.com/watch?v=XQyCgwB_szI&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=48)
 
-# Docker
+## Dynamically Adding Code
+It is possible to add code to your ASP.NET Core app without the code knowing about it via a couple of things:
+1. dotnet environment variables 
+2. Runtime package store
+3. Custom manifest artifect
+4. Code using certain interfaces to get called
+
+Image below shows a high level overview of the steps you need to do to use the custom assemblies in your runtime package store
+![Dynamic Code Pipeline](./Resources/AspNet/DynamicCode/DynamicPipeline.png)
+
+### Source
+Each step mentioned above is explained in the youtube video below.
+[Youtube Video](https://www.youtube.com/watch?v=LMuYH6b31AU&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=59)
+
+## Configuration
+Indept explanation will be in the source as there are alot of different ways you can use the Configuration.
+
+### IOptions
+There are a couple of different IOptions implementations which have other benefits
+![IOptions Types](./Resources/AspNet/Configuration/IOptionsTypes.png)
+
+#### Named Configuration
+Using the IOption types which support `Named` configurations can be configured and retrieved as follows:
+![Configuring Named Configuration](./Resources/AspNet/Configuration/NamedConfigurationBinding.png)
+![Retrieving Named Configuration](./Resources/AspNet/Configuration/RetrieveNamedConfiguration.png)
+
+### Validation
+It is possible to validate your configuration with custom logic or data annotations
+![Configuration Validation](./Resources/AspNet/Configuration/ConfigurationValidation.png)
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=1aNMO2cBmv0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=61)
+[GitHub Source](https://github.com/Codebytes/dotnet-configuration-in-depth)
+
+## Network Improvements
+There are alot of improvements in the network stack in .NET 7.0, here are a couple of highlights:
+1. HTTP/3 support
+2. HTTP/2 WebSocket support
+3. Experimental QUIC implementation (based on msquic)
+
+Detailed information can be found in the sources, but here are some images for clarity (images are taken from the source):
+![HTTP/3 vs HTTP/2](./Resources/AspNet/Network/Http3VsHttp2.png)
+![Quic Protocol](./Resources/AspNet/Network/QuicProtocol.png)
+![HTTP/3 When and Why](./Resources/AspNet/Network/WhenAndWhyHttp3.png)
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=mTdcWlIiX7c&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=62)
+[MSQuic](https://github.com/microsoft/msquic)
+[YARP](https://github.com/microsoft/reverse-proxy)
+
+# Containers
 ## Chiseled 
-104 MB image size
+.NET 7.0 now has the option to use a chiseled version of dotnet, this is a highly optimized minimal version for your app.
+The goal is to minimize the attack service and remove unnecessary features like bash.
+This would typically only be used in release mode and not at development mode.
+
+![Chiseled Size](./Resources/Microservices/Containers/ChiseledImageSize.png)
+![Implement](./Resources/Microservices/Containers/Usages.png)
+
+### Rootless
+The chiseled image does not have a root user (for valid security reasons) which will result in the port which is exposed by default which is 80 / 443 to change.
+This is because by default only root users can use the ports up to 1024.
+
+![Rootless Port](./Resources/Microservices/Containers/Rootless.png)
+
+#### Without Chiseled Images
+.NET team is working on creating images where the user is always non root.
+Planned but not promised for .NET 8.0
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=FLGFzlWF4Gs&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=65)
+[Rootless Without Chiseled Images](https://github.com/dotnet/dotnet-docker/issues/2249)
 
 # Blazor
 ## Custom Component
@@ -332,6 +431,22 @@ Using `Microsoft.Azure.AppConfig` nuget package will allow the usage of the `App
 Isolated process is now completely decoupled from the host and will from now on allow any runtime version as long as Azure supports it.
 Middleware is now also supported
 
+### Durable Functions
+Durable functions are orchestrators which calls multiple activities and manages these activities.
+Durable functions are now available in the isolated process model
+![Isolated Features](./Resources/Azure/Functions/Isolated.png)
+
+#### Exception Handling
+As the orchestrator calls multiple activities which are other functions there is no direct link between these two.
+It is however still possible to use the `try - catch` syntax to `catch` an exception thrown in the activity you manage.
+
+This is possible because the result of any function is saved as a state and will be deserialized and rethrown in the orchestrator.
+This is very powerful!
+![Exception Handling](./Resources/Azure/Functions/ExceptionHandling.png)
+
+##### Source
+[Youtube Video](https://www.youtube.com/watch?v=JIQzz7yIHpo&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=55)
+
 # MAUI
 ## Blazor Hybrid
 Shell can be used to add native navigation based on the environment your app is currently running on.
@@ -361,13 +476,28 @@ Overloading a checked version of your operator is supported by simply adding the
 Detailed blog about all the improvements can be found here:
 [.NET 7 Improvements](https://devblogs.microsoft.com/dotnet/performance_improvements_in_net_7/)
 
-### Source
-[Youtube Video](https://www.youtube.com/watch?v=yNPEdaxkTZw&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=25)
+### Static Lambdas
+Since C# 9 it is possible to use the `static` keyword on a lambda call which will allow the caller to only capture the specified variables and send it as part of the lambda.
+This all happens at runtime and does not need support for an overload func which has the variable you want to capture as part of the argument.
+Because this does not capture state it will not allocate any unnecessary memory for the compiled anonymous class.
+
+#### Before
+![Closure Allocation](./Resources/C#/Performance/ClosureAllocation.png)
+
+#### After
+![Without Closure Allocation](./Resources/C#/Performance/NoClosureAllocation.png)
+
+#### Performance Difference
+![Performance Difference](./Resources/C#/Performance/PerformanceDifference.png)
 
 ### On-Stack Replacement (OSR)
 Loop iterations are now tracked for the tiered compilation, this is on by default.
 This means that loops which previously did not get any tiered compilation to improve the throughput will now on the fly improve the method code when the Jitter hits the compilation tier threshhold.
 ![On-Stack Replacement](./Resources/C%23/Compiler/OnStackReplacement.png)
+
+### Source
+[Stephen Toub Runtime](https://www.youtube.com/watch?v=yNPEdaxkTZw&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=25)
+[Daniel Marbach Azure SDK](https://www.youtube.com/watch?v=z0r4lx618Us&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=56)
 
 ## File Scoped Classes
 Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
@@ -616,6 +746,50 @@ Meadow microcontrollers have full dotnet support which allows you to code your h
 ![Tempature Board](./Resources/IOT/TempatureBoard.png)
 ![Code](./Resources/IOT/HardwareConnection.png)
 
+# ComputeSharp
+ComputeSharp lets you write C# code which gets converted to hlsl shaders for DirectX at compile time.
+It has full support for all the hlsl features and even has intellisence
+![Paint.NET](./Resources/ComputeSharp/PaintNET.png)
+![Compute Shader](./Resources/ComputeSharp/ComputeShader.png)
+
+## Performance
+Using the GPU instead of the CPU can improve the performance for specific workloads.
+The following image shows the possible gains in certain workloads
+![CPU vs GPU](./Resources/ComputeSharp/PerfCpuVsGpu.png)
+
+# Database
+## EF 7
+### Execute Extensions
+Finally possible to `Update` and `Delete` records without first retrieving them via `Get`!!
+This reduces the additional round trip of first retrieving the data and then working on it.
+
+#### UpdateAsync
+To update on the data you need to use the `ExecuteUpdateAsync` method on the non materialized dataset (not retrieved).
+This method requires a parameter in which you specify what properties of the result model should be changed to what value.
+This way you don't need to retrieve the data first to then change the data and send it back to the database.
+
+![UpdateAsync](./Resources/Database/ExecuteAsync/Update.png)
+
+#### DeleteAsync
+![DeleteAsync](./Resources/Database/ExecuteAsync/Delete.png)
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=1U02rnSaz9Q&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=67)
+
+## Graph
+Graph databases store their data in graphs. 
+Graphs are basically vertexes with edges that link data to another.
+Think of it as traversing in interests tree in which topics that are edges of a generialized vertex. Can be linked to me as edge because of my interests.
+This way you can easier traverse the relation to edges.
+
+![Graph Relations](./Resources/Database/Graph/GraphLink.png)
+
+### Dropping Data
+As graphs are linked to each other via edges, you only need to drop the vertexes which will in turn drop their edges.
+
+#### Note
+Not sure if this is Azure CosmosDB specific or not, but in this documenation I will talk in the context of Azure CosmosDB
+
 # Source
 [Playlist](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn)
 
@@ -626,3 +800,4 @@ Starting from:
 ![Start](./Resources/MissedSessions/Start.png)
 Until:
 ...
+![Missing](./Resources/MissedSessions/missing.png)
