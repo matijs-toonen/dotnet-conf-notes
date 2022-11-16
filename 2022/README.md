@@ -800,4 +800,5 @@ Starting from:
 ![Start](./Resources/MissedSessions/Start.png)
 Until:
 ...
-![Missing](./Resources/MissedSessions/missing.png)
+![Missing 1](./Resources/MissedSessions/Missing_1.png)
+![Missing 2](./Resources/MissedSessions/Missing_2.png)
