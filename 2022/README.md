@@ -42,6 +42,9 @@
   - [WebAssembly](#webassembly)
     - [SIMD / Vectorization](#simd--vectorization)
     - [Multithreading [ALPHA]](#multithreading-alpha)
+      - [Considerations](#considerations)
+      - [Example](#example)
+    - [JavaScript Interop](#javascript-interop)
     - [AOT Compilation](#aot-compilation)
   - [Playwright Testing](#playwright-testing)
     - [Tracing](#tracing)
@@ -65,6 +68,12 @@
     - [Durable Functions](#durable-functions)
       - [Exception Handling](#exception-handling)
         - [Source](#source-5)
+  - [Static Web Apps](#static-web-apps)
+    - [Container Apps](#container-apps-1)
+    - [Linking](#linking)
+    - [Enterprise Grade Edge](#enterprise-grade-edge)
+    - [Authentication](#authentication)
+    - [Source](#source-6)
 - [MAUI](#maui)
   - [Blazor Hybrid](#blazor-hybrid)
 - [Orleans](#orleans)
@@ -77,11 +86,11 @@
       - [After](#after)
       - [Performance Difference](#performance-difference)
     - [On-Stack Replacement (OSR)](#on-stack-replacement-osr)
-    - [Source](#source-6)
+    - [Source](#source-7)
   - [File Scoped Classes](#file-scoped-classes)
   - [Interop](#interop)
     - [DisableRuntimeMarshalling](#disableruntimemarshalling)
-    - [Source](#source-7)
+    - [Source](#source-8)
     - [CustomMarshaller](#custommarshaller)
 - [GitHub](#github)
   - [Dependabot](#dependabot)
@@ -107,10 +116,10 @@
     - [Swagger](#swagger)
   - [Azure App Service](#azure-app-service)
 - [NativeAOT](#nativeaot)
-  - [Source](#source-8)
+  - [Source](#source-9)
 - [Microservices](#microservices)
   - [Authentication / Authorization](#authentication--authorization)
-    - [Source](#source-9)
+    - [Source](#source-10)
     - [Important Reminders](#important-reminders)
       - [Authorization Response](#authorization-response)
       - [Conclusion](#conclusion)
@@ -128,6 +137,8 @@
 - [ML.NET](#mlnet)
   - [TorchSharp](#torchsharp)
   - [TensorFlow](#tensorflow)
+  - [NER & Question Answering](#ner--question-answering)
+  - [Object Detection](#object-detection)
 - [T4](#t4)
   - [Power Tools](#power-tools)
   - [Entity Framework 7](#entity-framework-7)
@@ -141,13 +152,12 @@
     - [Execute Extensions](#execute-extensions)
       - [UpdateAsync](#updateasync)
       - [DeleteAsync](#deleteasync)
-    - [Source](#source-10)
+    - [Source](#source-11)
   - [Graph](#graph)
     - [Dropping Data](#dropping-data)
       - [Note](#note)
-- [Source](#source-11)
+- [Source](#source-12)
 - [TODO](#todo)
-  - [Missed Sessions Chain](#missed-sessions-chain)
 
 # Aspnet
 ## Auth
@@ -343,6 +353,22 @@ WebAssembly now supports SIMD via the already existing apis
 
 ### Multithreading [ALPHA]
 Not supported out of the box, but can be configured to be used. **NOT PRODUCTION READY**
+Multithreading is implemented using `WebWorkers` and `SharedArrayBuffer` which is supported on all major browsers.
+![Threading](./Resources/AspNet/Blazor/Multithreading/Features.png)
+
+#### Considerations
+There are a couple of things you **currently** need to do to enable multithreading
+![Considerations](./Resources/AspNet/Blazor/Multithreading/CurrentConsiderations.png)
+
+#### Example
+You can find a quick demo of an example app running the uno platform with webassembly in .NET 7.0 with multi threading enabled
+[here](https://raytracerbenchmark-wasm.platform.uno/).
+This example shows the capabilities of offloading work to multiple threads, as long as your CPU can handle it.
+
+### JavaScript Interop
+Possible to export a lambda from C# to JS which will be executed in JS to run C# code.
+![Export Lambda](./Resources/AspNet/Blazor/JSInterop/ExportLambda.png)
+![Execute Lambda JS](./Resources/AspNet/Blazor/JSInterop/ExecuteLambdaInJs.png)
 
 ### AOT Compilation
 Compiling your webassembly app in AOT improves the performance of the app by alot!
@@ -446,6 +472,36 @@ This is very powerful!
 
 ##### Source
 [Youtube Video](https://www.youtube.com/watch?v=JIQzz7yIHpo&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=55)
+
+## Static Web Apps
+Along support for `Function Apps` as the backend, static web apps now has **preview** support for using the following Azure Services as the backend:
+1. Api Management Service
+2. App Service
+3. Container Apps
+
+### Container Apps
+Using container apps you can create microservices in a serverless environment.
+Connecting this with the static web apps is very powerful!
+
+### Linking
+To Link your static web app to a backend mentioned above (including Function Apps), you will need to upgrade your static web app to Standard tier.
+
+### Enterprise Grade Edge
+It is possible to enable the Enterprise Grade Edge which uses Azure Frontdoor and Azure CDN in combination with the static web app.
+![Enterprise Grade Edge](./Resources/Azure/StaticWebApps/EnterpriseGradeEdge.png)
+
+### Authentication
+Authentication can be done by the backend identity.
+Supported identity providers out of the box for free tier:
+1. GitHub
+2. Twitter
+3. Azure AD
+  
+Custom providers are supported at standard tier.
+![Authentication Flow](./Resources/Azure/StaticWebApps/Authentication.png)
+
+### Source
+[Youtube Video](https://www.youtube.com/watch?v=FjGjguW1Xa0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=75)
 
 # MAUI
 ## Blazor Hybrid
@@ -715,6 +771,14 @@ Infer# has DevOps integration and can be used together with things like GitHub A
 You can also use `TensorFlow` in C# via `TensorFlow.NET`. TensorFlow.NET has great support for every environment.
 ![TensorFlow.NET](./Resources/MachineLearning/TensorFlowNET.png)
 
+## NER & Question Answering
+Using the `Named-entity Recognition` feature in ML.NET 2.0 allows for a question answering based on a given context.
+![Question Answering](./Resources/MachineLearning/NerAndQuestionAnswering.png)
+
+## Object Detection
+Object detection is on the roadmap of ML.NET and will use a given context to check for objects.
+![Computer Vision](./Resources/MachineLearning/ComputerVision.png)
+
 # T4
 T4 or TT files are templates for creating files mixed with C#.
 You can compare it to `Razor` files that use C# to conditionally render HTML.
@@ -795,10 +859,4 @@ Not sure if this is Azure CosmosDB specific or not, but in this documenation I w
 
 # TODO
 Missed sessions:
-## Missed Sessions Chain
-Starting from:
-![Start](./Resources/MissedSessions/Start.png)
-Until:
-...
-![Missing 1](./Resources/MissedSessions/Missing_1.png)
-![Missing 2](./Resources/MissedSessions/Missing_2.png)
+![Missing](./Resources/MissedSessions/Missing.png)
