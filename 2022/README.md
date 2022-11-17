@@ -169,7 +169,7 @@ Configuring the `ValidIssuer` property in the `Authentication` property of the l
 ![ValidIssuer](./Resources/AspNet/Authentication/ValidIssuer.png)
 
 ## Devtunnels
-Configuration settings on the csproj which will generate a public url which points to your own machine 
+Configuration settings on the csproj which will generate a public url which points to your own machine
 
 ## Request
 ### MapRoute
@@ -215,6 +215,7 @@ The tokens cannot exceed a predefined bucket limit
 
 ### Partitions
 Define a limit by a custom value, e.g.
+
 1. Based in IP
 2. Based on Token
 
@@ -231,6 +232,7 @@ When calling the `UseOutputCache` after the `UseRateLimiter` call it will both c
 ## Migration 
 A new way to migrate an existing project of ASP.NET to ASP.NET Core has been added which utilises YARP.
 This is called incremental migration and works to following way:
+
 1. Requests directed to routes which have **NOT** yet been migrated will be forwarded to the **old** existing code running on ASP.NET
 2. Requests directed to routes which have been migrated will be handled within the YARP app as this app also includes the code.
 
@@ -246,21 +248,25 @@ There are a couple of steps you can take to migrate safely from ASP.NET to ASP.N
 Because not all features from ASP.NET are available in ASP.NET Core, it is recommended to migrate in the following order to ensure the features still work.
 
 #### Preparation
+
 1. Migrate the project using the extension to create a new ASP.NET Core application which at that moment routes all traffic from the ASP.NET Core app to the ASP.NET app using YARP
 2. Ensure all features still work the same way
 
 #### Migrating The Code
 The following steps apply to all the code you have in your ASP.NET app and will be done repetitively.
+
 1. Migrate a single controller, view, or class using the extension. The extension will update the YARP rules for you.
 2. Resolve any issues for that single migrated object
 3. Test the use cases for that object
 4. Deploy
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=XQyCgwB_szI&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=48)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=XQyCgwB_szI&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=48)
 
 ## Dynamically Adding Code
 It is possible to add code to your ASP.NET Core app without the code knowing about it via a couple of things:
+
 1. dotnet environment variables 
 2. Runtime package store
 3. Custom manifest artifect
@@ -270,8 +276,9 @@ Image below shows a high level overview of the steps you need to do to use the c
 ![Dynamic Code Pipeline](./Resources/AspNet/DynamicCode/DynamicPipeline.png)
 
 ### Source
+
 Each step mentioned above is explained in the youtube video below.
-[Youtube Video](https://www.youtube.com/watch?v=LMuYH6b31AU&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=59)
+1. [Youtube Video](https://www.youtube.com/watch?v=LMuYH6b31AU&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=59)
 
 ## Configuration
 Indept explanation will be in the source as there are alot of different ways you can use the Configuration.
@@ -290,11 +297,13 @@ It is possible to validate your configuration with custom logic or data annotati
 ![Configuration Validation](./Resources/AspNet/Configuration/ConfigurationValidation.png)
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=1aNMO2cBmv0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=61)
-[GitHub Source](https://github.com/Codebytes/dotnet-configuration-in-depth)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=1aNMO2cBmv0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=61)
+2. [GitHub Source](https://github.com/Codebytes/dotnet-configuration-in-depth)
 
 ## Network Improvements
 There are alot of improvements in the network stack in .NET 7.0, here are a couple of highlights:
+
 1. HTTP/3 support
 2. HTTP/2 WebSocket support
 3. Experimental QUIC implementation (based on msquic)
@@ -305,9 +314,10 @@ Detailed information can be found in the sources, but here are some images for c
 ![HTTP/3 When and Why](./Resources/AspNet/Network/WhenAndWhyHttp3.png)
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=mTdcWlIiX7c&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=62)
-[MSQuic](https://github.com/microsoft/msquic)
-[YARP](https://github.com/microsoft/reverse-proxy)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=mTdcWlIiX7c&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=62)
+2. [MSQuic](https://github.com/microsoft/msquic)
+3. [YARP](https://github.com/microsoft/reverse-proxy)
 
 # Containers
 ## Chiseled 
@@ -329,8 +339,9 @@ This is because by default only root users can use the ports up to 1024.
 Planned but not promised for .NET 8.0
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=FLGFzlWF4Gs&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=65)
-[Rootless Without Chiseled Images](https://github.com/dotnet/dotnet-docker/issues/2249)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=FLGFzlWF4Gs&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=65)
+2. [Rootless Without Chiseled Images](https://github.com/dotnet/dotnet-docker/issues/2249)
 
 # Blazor
 ## Custom Component
@@ -378,6 +389,7 @@ Playwright is a testing framework for UI testing. It is possible to record UI st
 
 ### Tracing
 It is possible to look through traces made by playwright in which you can see the following information:
+
 1. The steps which got executed
 2. How long these steps took to execute
 3. The devtools of your browser at that point (think about console errors)
@@ -409,6 +421,7 @@ The compiler will scope the css to only the html in the razor file based on an u
 Creating variables is possible by using a prefix of `--` with an name of the variable and the value e.g. `--foo: #000;`. 
 This will create a variable named `--foo` and can later on be referenced using the `var` keyword e.g. `var(--foo, [fallback value])`
 It is also possible to define a scope in which this variable is set to a specific value:
+
 1. using `:root { --foo: #000; }` will globally set the variable `--foo` to `#000`
 2. using `.baz { --foo: #FFF; }` will set the variable of `--foo` to `#FFF` **ONLY** when it is applied on the baz class.
 ![CSS Variables](./Resources/AspNet/Blazor/Styling/Css/Variables.png)
@@ -449,6 +462,7 @@ It is possible to create a CDN for the Blob Storage which will serve all the fil
 ## App Configuration
 Using `Microsoft.Azure.AppConfig` nuget package will allow the usage of the `App Configuration` for this app.
 `DefaultAzureCredential` will be resolved in two different ways:
+
 1. When running locally, it will use the currently logged in Visual Studio user account
 2. When deployed to the Cloud, it will use the managed identity configured for that app.
 ![AddAppConfiguration](./Resources/Azure/AppConfiguration/AddAppConfiguration.png)
@@ -471,10 +485,12 @@ This is very powerful!
 ![Exception Handling](./Resources/Azure/Functions/ExceptionHandling.png)
 
 ##### Source
-[Youtube Video](https://www.youtube.com/watch?v=JIQzz7yIHpo&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=55)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=JIQzz7yIHpo&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=55)
 
 ## Static Web Apps
 Along support for `Function Apps` as the backend, static web apps now has **preview** support for using the following Azure Services as the backend:
+
 1. Api Management Service
 2. App Service
 3. Container Apps
@@ -493,6 +509,7 @@ It is possible to enable the Enterprise Grade Edge which uses Azure Frontdoor an
 ### Authentication
 Authentication can be done by the backend identity.
 Supported identity providers out of the box for free tier:
+
 1. GitHub
 2. Twitter
 3. Azure AD
@@ -501,7 +518,8 @@ Custom providers are supported at standard tier.
 ![Authentication Flow](./Resources/Azure/StaticWebApps/Authentication.png)
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=FjGjguW1Xa0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=75)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=FjGjguW1Xa0&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=75)
 
 # MAUI
 ## Blazor Hybrid
@@ -538,13 +556,13 @@ This all happens at runtime and does not need support for an overload func which
 Because this does not capture state it will not allocate any unnecessary memory for the compiled anonymous class.
 
 #### Before
-![Closure Allocation](./Resources/C#/Performance/ClosureAllocation.png)
+![Closure Allocation](./Resources/C%23/Performance/ClosureAllocation.png)
 
 #### After
-![Without Closure Allocation](./Resources/C#/Performance/NoClosureAllocation.png)
+![Without Closure Allocation](./Resources/C%23/Performance/NoClosureAllocation.png)
 
 #### Performance Difference
-![Performance Difference](./Resources/C#/Performance/PerformanceDifference.png)
+![Performance Difference](./Resources/C%23/Performance/PerformanceDifference.png)
 
 ### On-Stack Replacement (OSR)
 Loop iterations are now tracked for the tiered compilation, this is on by default.
@@ -552,8 +570,9 @@ This means that loops which previously did not get any tiered compilation to imp
 ![On-Stack Replacement](./Resources/C%23/Compiler/OnStackReplacement.png)
 
 ### Source
-[Stephen Toub Runtime](https://www.youtube.com/watch?v=yNPEdaxkTZw&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=25)
-[Daniel Marbach Azure SDK](https://www.youtube.com/watch?v=z0r4lx618Us&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=56)
+
+1. [Stephen Toub Runtime](https://www.youtube.com/watch?v=yNPEdaxkTZw&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=25)
+2. [Daniel Marbach Azure SDK](https://www.youtube.com/watch?v=z0r4lx618Us&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=56)
 
 ## File Scoped Classes
 Mostly used for source generators to ensure there is no way that files have conflicting names when generating a backing class.
@@ -562,6 +581,7 @@ The `file` keyword results in the class only being available within that file.
 ## Interop
 New attribute called `LibraryImport`, using `LibraryImport` will use source generators to generate the code needed at compile time and not dynamically at runtime like `DllImport` does.
 This improves a couple of things:
+
 1. Performance as the runtime doesn't need to generate code at runtime
 2. Debugging as this code can be stepped through
 3. The generated source code is included in the stacktrace which will improve tracing
@@ -572,11 +592,13 @@ This improves a couple of things:
 Not that clear at the moment how this works and when to use it
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=ucNcRtnifXY&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=47)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=ucNcRtnifXY&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=47)
 
 ### CustomMarshaller
 Using `LibraryImport` you need to create a custom marshaller for custom types, this allows for more control over your marshalling.
 You can also specify which marshaller you want to use when converting your type to the unmanaged type, this is done via 2 ways:
+
 1. `NativeMarshalling` attribute on the type itself, assigning this will set this marshaller as the default marshaller for this type
 2. `MarshalUsing` attribute on the type in your method signature in the `LibraryImport`, assigning this will override the default marshaller for this type with the specified marshaller
 
@@ -593,6 +615,7 @@ It is possible to create a dev box setup by your IT department for specific need
 Before creating a dev box you need to select a project and dev box pool out of the projects and hardware pools setup.
 
 This dev box will have everything needed for your project ready. Think of the following:
+
 1. Frontend dev pool -> Visual Studio Code, npm, etc.
 2. Backend dev pool -> Visual Studio, dotnet, etc.
 3. etc.
@@ -640,6 +663,7 @@ Example of this would be to inject the `ILogger` class into the connected WCF se
 ### Injected Attribute
 It is possible to get the `HttpContext` or any other DI type when the method gets called.
 There are 3 steps to enable this feature:
+
 1. Add a package reference to `CoreWCF.Primitives`
 2. Change the `Service` class to `partial`, this is done as the parameters do not match the interface signature and the `partial` keyword will allow code generation to create the method which matches the interface and internally call your method with the requested parameters
 3. Add the `Injected` attribute to the `parameter` which you want to be injected.
@@ -658,6 +682,7 @@ With gRPC server reflection you can expose metadata about your gRPC contracts th
 
 ### Enabling Server Reflection
 There are a couple of steps you need to take before server reflection is enabled on your gRPC server:
+
 1. Add the `Grpc.AspNetCore.Server.Reflection` nuget package to your server project.
 2. Add the `AddGrpcReflection` method to your services.
 3. Map the `MapGrpcReflectionService` method to your app.
@@ -670,6 +695,7 @@ Postman now supports gRPC Requests! Using [Server Reflection](#server-reflection
 ## gRPC Json Transcoding
 With Json Transcoding it is possible to expose the gRPC methods via gRPC as well as classic REST.
 The following steps enable the Json Transcoding feature:
+
 1. Add the `Microsoft.AspNetCore.Grpc.JsonTranscoding` nuget package to your server project.
 2. Add `AddJsonTranscoding` method to your `AddGrpc` method chain.
 3. Configure the endpoint route and type of your gRPC method on REST
@@ -682,6 +708,7 @@ Notice that the `Name` property directly links to the `Name` property of the inp
 ### Swagger
 Because Rest api's show up in swagger it is now possible to add swagger for your Rest api's.
 The following steps enable swagger for the Json Transcoded methods:
+
 1. Add the `Microsoft.AspNetCore.Grpc.Swagger` nuget package to your server project.
 2. Add the `AddGrpcSwagger` method to your services.
 3. Add the default `AddSwaggerUI` and `UseSwaggerUI` methods.
@@ -699,7 +726,8 @@ It will however have a lower memory usage, faster startup time, and better nativ
 Information is interesting, but to hard to explain.
 
 ## Source
-[Youtube Video](https://www.youtube.com/watch?v=AFDvMHETupA&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=52)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=AFDvMHETupA&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=52)
 
 # Microservices
 ## Authentication / Authorization
@@ -707,7 +735,8 @@ Information is interesting, but to hard to explain.
 Very interesting, but to hard to explain.
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=DVqvRZ0w-7g&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=53)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=DVqvRZ0w-7g&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=53)
 
 ### Important Reminders
 #### Authorization Response
