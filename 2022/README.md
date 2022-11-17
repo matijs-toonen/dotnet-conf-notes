@@ -829,7 +829,8 @@ CloudEvents is an standardised format for sending and receiving events.
 
 ## Architecture
 Using the following architecture will decouple the publisher and subscribers from the broker and introduce intermediate adapters / handlers to format the data in the CloudEvents format.
-Examples of use cases: 
+Examples of use cases:
+
 1. You have a legacy publisher app that you don't want to change but you still want to use CloudEvents
 2. Reduce the complexity of the handler as the handler only receives the usefull information for it
 ![Architecture](./Resources/Microservices/Events/ArchitecturePubSub.png)
@@ -867,7 +868,8 @@ This way you don't need to retrieve the data first to then change the data and s
 ![DeleteAsync](./Resources/Database/ExecuteAsync/Delete.png)
 
 ### Source
-[Youtube Video](https://www.youtube.com/watch?v=1U02rnSaz9Q&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=67)
+
+1. [Youtube Video](https://www.youtube.com/watch?v=1U02rnSaz9Q&list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn&index=67)
 
 ## Graph
 Graph databases store their data in graphs. 
@@ -884,8 +886,10 @@ As graphs are linked to each other via edges, you only need to drop the vertexes
 Not sure if this is Azure CosmosDB specific or not, but in this documenation I will talk in the context of Azure CosmosDB
 
 # Source
-[Playlist](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn)
+
+1. [Playlist](https://www.youtube.com/playlist?list=PLdo4fOcmZ0oVlqu_V8EXUDDnPsYwemxjn)
 
 # TODO
 Missed sessions:
+
 ![Missing](./Resources/MissedSessions/Missing.png)
