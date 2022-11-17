@@ -1,4 +1,4 @@
-# Dotnet Conf Playground
+# Dotnet Conf Notes
 This repo contains the things I learned while watching dotnet confs each year.
 
 # Structure
