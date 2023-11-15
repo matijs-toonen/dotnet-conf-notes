@@ -1,4 +1,10 @@
 - [Asp.Net](#aspnet)
+  - [Middlewares](#middlewares)
+    - [Antiforgery](#antiforgery)
+    - [Keyed services](#keyed-services)
+    - [Request timeouts](#request-timeouts)
+    - [Short circuit](#short-circuit)
+    - [Exception handlers](#exception-handlers)
   - [Blazor](#blazor)
     - [Stream rendering](#stream-rendering)
     - [Static Server Side Rendering](#static-server-side-rendering)
@@ -28,9 +34,42 @@
   - [MongoDB](#mongodb)
 - [AI](#ai)
   - [Semantic kernal](#semantic-kernal)
+- [OpenTelemetry](#opentelemetry)
+  - [Logging](#logging)
+- [Resilience](#resilience)
+  - [Http client](#http-client)
+- [Json](#json)
+  - [Object creation handling](#object-creation-handling)
+  - [Required property](#required-property)
+  - [Unmapped json member handling](#unmapped-json-member-handling)
+  - [Interface hierarchy](#interface-hierarchy)
+- [TODO](#todo)
 
 
 # Asp.Net
+## Middlewares
+### Antiforgery
+Anti forgery is now added as a possible middleware, this middleware is used to validate the tokens against forgery.
+![Anti forgery](./Resources/AspNet/Middlewares/AntiForgery/AntiForgery.png)
+
+### Keyed services
+KeyedServices allow the possibility to have multiple different services injected under the same `Interface` while being injected in another collection. This collection is named, so you can retrieve the correct variant of that interface
+![Keyed services](./Resources/AspNet/Middlewares/KeyedServices/KeyedServices.png)
+
+### Request timeouts
+It is now possible to configure a request timeout on the server side. This means that any request that takes longer than the configured timeout will be cancelled via setting the `CancellationToken` to cancelled. If the API correctly handles this. This configuration can be done per endpoint or endpoint group as well as be set as default policy for all endpoints. Furhtermore it also supports disabling it for specific endpoints.
+![Request timeouts](./Resources/AspNet/Middlewares/RequestTimeouts/RequestTimeouts.png)
+
+### Short circuit
+Configuring an endpoint as a short circuit endpoint will execute the api, but only do that and not add any overhead by logging the call.
+![Short circuit](./Resources/AspNet/Middlewares/ShortCircuit/ShortCircuit.png)
+
+### Exception handlers
+Configuring exception handlers will ensure that when an exception is thrown by your application, the handler receives that exception before the connection is closed and it will decide how to handle the respone.
+The handler method returns `true` when it has responded to the request itself and the request has now completed and `false` when the default `UseExceptionHandler` should redirect the request to the error page.
+![Configuring an exception handler](./Resources/AspNet/Middlewares/ExceptionHandler/ConfiguringTheHandlers.png)
+![Custom exception handler](./Resources/AspNet/Middlewares/ExceptionHandler/CustomHandler.png)
+
 ## Blazor
 ![Frontend development in blazor with .net 8](./Resources/AspNet/Blazor/FrontendDevelopmentInBlazor.png)
 
@@ -203,3 +242,48 @@ AI is generally hard to configure as there are a lot of steps involved with gett
 
 Semantic kernal helps abstract these things away and provide you an API which does this for you. This API can then talk to the configured connectors behind the scenes (like Azure OpenAI). This simplifies the process.
 ![Semantic kernal](./Resources/AI/SemanticKernal/SemanticKernal.png)
+
+# OpenTelemetry
+## Logging
+Instead of using the `ILogger.LogInformation` (or other `LogXxx` methods), you should use the `LoggerMessage` attribute which logs the correct statement for you without boxing the objects into an `object`. 
+![LoggerMessage attribute](./Resources/OpenTelemetry/Logging/LoggerMessageAttribute.png)
+
+# Resilience
+## Http client
+Using the `Microsoft.Extensions.Http.Resilience` will allow setting resilience configuration for the `Http clients` based on the underlying Polly package.
+![Resilience handler](./Resources/Resilience/HttpClient/ResilienceHandler.png)
+![Resilience handler 2](./Resources/Resilience/HttpClient/ResilienceHandler2.png)
+It is also possible to set the default standards which is configured in the package, you can override these settings via the `Configure` method
+![Standard resilience handler](./Resources/Resilience/HttpClient/StandardResilienceHandler.png)
+
+When wanting to send the requests in parallel use `HedgingHandler`. Hedging will run the requests that are slow in parallel. **Note** this should only be used when the requests that are being send are idempotent.
+![Hedging handler](./Resources/Resilience/HttpClient/HedgingHandler.png)
+![Different strategies](./Resources/Resilience/HttpClient/DifferentStrategies.png)
+
+The resilience handler also respects the `retry-after` header by default. This header is sent back by the server if the server has rate limiting configured (correctly). This can be turned off, if this is not the behaviour that you want.
+
+
+The package has support for OpenTelemetry and will trace or log data that is relevant.
+
+# Json
+## Object creation handling
+System.Text.Json does by default ignore the deserialization of properties that are readonly.
+However if that property has a default value assigned to it which can be mutated, it can instead of assign the property with a new value take that value and populate it with the data. This can be done via the `JsonObjectCreationHandling` attribute.
+![Creation handling](./Resources/Json/ObjectCreationHandling.png)
+This attribute can also be moved to the source generator so this configuration is not tied to the object.
+![Creation handling on source generator](./Resources/Json/ObjectCreationHandlingSourceGenerator.png)
+
+## Required property
+The `required` keyword for properties is finally enforced 🥳!
+
+## Unmapped json member handling
+Using the `JsonUnmappedMemberHandling` attribute it is possible to specify the behaviour requested for the deserialization around unmapped json members.
+This means you can enforce the contract to be the same as the input and not accept unwanted properties.
+![Json unmapped members handling](./Resources/Json/JsonUnmappedMembers.png)
+
+## Interface hierarchy
+Base hierarchy types will now be included in the serialization of an interface.
+![Interface hierarchy](./Resources/Json/InterfaceHierarchy.png)
+
+# TODO
+From this onwards: ![TODO](./Resources/Todo.png)
