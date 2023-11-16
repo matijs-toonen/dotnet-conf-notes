@@ -5,6 +5,7 @@
     - [Request timeouts](#request-timeouts)
     - [Short circuit](#short-circuit)
     - [Exception handlers](#exception-handlers)
+  - [Hosted services](#hosted-services)
   - [Blazor](#blazor)
     - [Stream rendering](#stream-rendering)
     - [Static Server Side Rendering](#static-server-side-rendering)
@@ -43,7 +44,12 @@
   - [Required property](#required-property)
   - [Unmapped json member handling](#unmapped-json-member-handling)
   - [Interface hierarchy](#interface-hierarchy)
+- [Pattern matching](#pattern-matching)
+  - [Switch expression](#switch-expression)
 - [TODO](#todo)
+  - [1](#1)
+    - [Source](#source-1)
+  - [2](#2)
 
 
 # Asp.Net
@@ -69,6 +75,18 @@ Configuring exception handlers will ensure that when an exception is thrown by y
 The handler method returns `true` when it has responded to the request itself and the request has now completed and `false` when the default `UseExceptionHandler` should redirect the request to the error page.
 ![Configuring an exception handler](./Resources/AspNet/Middlewares/ExceptionHandler/ConfiguringTheHandlers.png)
 ![Custom exception handler](./Resources/AspNet/Middlewares/ExceptionHandler/CustomHandler.png)
+
+## Hosted services
+The new `IHostedLifecycleService` interface for more control over when the hosted servive should run. This interface introduces the `Starting`, `Started`, `Stoping`,  and `Stopped` methods. This means the service can choose to run before the application started (e.g. when you need to migrate the database before the application can run) or choose to run a job after the application has started (e.g. just a background job that is not dependent on the application state). This improves startup time.
+![IHostedLifecycleService](./Resources/AspNet/HostedServices/IHostedLifecycleService.png)
+
+Also, as hosted services start in FIFO (first in first out) and stop in LIFO (last in first out) order and the startup of the application itself (`app.Run()`) is also done as an `HostedService` which is **always** appendend as the last `HostedService` in the stack. It will mean that all the HostedServices have to be started before the application can be started in order. When you have HostedServices that take a while to run it will impact the whole startup time.
+The reverse happens when the application stops. The application is configured (by default) to have a maximum stop time of 30 seconds which means that because the stopping is done in order and the application itself stops first. Any HostedService that takes a time chips away from this maximum stop time. This means that the last service might have only 2 seconds left to run or might not even run at all.
+In .NET 8 it is possible to configuring the hosted services to be started / stopped concurrently. This can be done in the `HostOptions`.
+
+Now possible to configure the `StartupTimout` of the application, this will shut the application down if it does not start in the specified time.
+This can be useful for situations where startup time is critical and you want to prevent regression or when some `HostedService` that is required for the app to run is actually taking up too much time which might indicate an issue.
+![Concurrent hosted services](./Resources/AspNet/HostedServices/ConcurrentServices.png)
 
 ## Blazor
 ![Frontend development in blazor with .net 8](./Resources/AspNet/Blazor/FrontendDevelopmentInBlazor.png)
@@ -242,6 +260,7 @@ AI is generally hard to configure as there are a lot of steps involved with gett
 
 Semantic kernal helps abstract these things away and provide you an API which does this for you. This API can then talk to the configured connectors behind the scenes (like Azure OpenAI). This simplifies the process.
 ![Semantic kernal](./Resources/AI/SemanticKernal/SemanticKernal.png)
+![Copilot stack](./Resources//AI/SemanticKernal/CopilotStack.png)
 
 # OpenTelemetry
 ## Logging
@@ -285,5 +304,24 @@ This means you can enforce the contract to be the same as the input and not acce
 Base hierarchy types will now be included in the serialization of an interface.
 ![Interface hierarchy](./Resources/Json/InterfaceHierarchy.png)
 
+# Pattern matching
+## Switch expression
+**Note** the features below here were already available since `C# 9`, but unknown to me hence I wrote them down.
+
+When using a switch expression it is possible to capture the default value in a variable via capturing it as `var [variable name]` instead of discarding it via `_`. 
+**Note**: When capturing the default value as a variable in a switch expression the variable will always be nullable as the switch expression pattern matching also checks if the type is not `null`. This means that when it is `null` but of that type it will still go to the default clause which is the variable defined. Because of this, this variable is always nullable and should be used with nullability in mind.
+![Switch expression default variable](./Resources/PatternMatching/SwitchExpression/DefaultVariable.png)
+
+Also, when having a condition on a sub property which is nullable it will automatically check the nullability for you and not throw an exception.
+![Subproperty nullable condition](./Resources/PatternMatching/SwitchExpression/NullableNestedProperty.png)
+
 # TODO
-From this onwards: ![TODO](./Resources/Todo.png)
+## 1
+From this: ![TODO from 1](./Resources/Todo/TodoFrom1.png)
+To this: ![TODO until 1](./Resources/Todo/TodoUntil1.png)
+
+### Source
+[Day 2 (includes all the missed sessions)](https://www.youtube.com/watch?v=vU-iZcxbDUk)
+
+## 2
+From this: ![TODO from 2](./Resources/Todo/TodoFrom2.png)
