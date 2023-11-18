@@ -26,6 +26,10 @@
     - [Dynamically adapting to application sizes (DATAS)](#dynamically-adapting-to-application-sizes-datas)
       - [Source](#source-1)
   - [Dynamic profile guided optimizations (PGO)](#dynamic-profile-guided-optimizations-pgo)
+    - [Instrumentation overhead](#instrumentation-overhead)
+    - [Guarded devirtualization (GDV)](#guarded-devirtualization-gdv)
+      - [Ready to run (R2R) code PGO](#ready-to-run-r2r-code-pgo)
+    - [Sources](#sources)
   - [SearchValues](#searchvalues)
 - [C# language](#c-language)
   - [Aliases](#aliases)
@@ -70,11 +74,6 @@
     - [Automatically configure the source mapping](#automatically-configure-the-source-mapping)
     - [Disallow transitive source packages from different source](#disallow-transitive-source-packages-from-different-source)
 - [TODO](#todo)
-  - [1](#1)
-    - [Source](#source-2)
-  - [2](#2)
-  - [3](#3)
-
 
 # Asp.Net
 ## Middlewares
@@ -224,6 +223,29 @@ Setting the `DOTNET_JitDisasm="[method name]"` where `[method name]` is replaced
 
 This also shows the tiered compilation so any recompilation will also be shown with the new assembly.
 ![JIT disassembly for method](./Resources/Performance/ProfileGuidedOptimizations/JitDisasm.png)
+
+### Instrumentation overhead
+Starting .NET 8 the instrumentation overhead has dropped significantly to the point where it is close to the non instrumented tier. This means that enabling the instrumentation is **no longer** a tradeoff between temporary performance drops for performance improvements later on (when the tier gets promoted).
+This is a big improvement and means that PGO is close to being free!
+![Impact of instrumentation](./Resources/Performance/ProfileGuidedOptimizations/ImpactOfInstrumentation.png)
+
+### Guarded devirtualization (GDV)
+Instead of doing a virtual call to the interface/virtual method, the compiler will try to predict based on call information and will add code optimized for that specific instance of that virtual method or interface.
+This is done based on call site testing, so if you have an instance of an class passed as an interface of that class it will always be the same instance even though it is passed as an interface. After seeing this, the compiler will devirtualize the code into code optimized for that specific type.
+![Guarded devirtualization example](./Resources/Performance/ProfileGuidedOptimizations/GuardedDevirtualization/GDVExample.png)
+![Guarded devirtualization loop hoisting](./Resources/Performance/ProfileGuidedOptimizations/GuardedDevirtualization/GDVLoopHoisting.png)
+
+#### Ready to run (R2R) code PGO
+Ready to run compiled code will now also be instrumented along side the already previously made optimization. The R2R code will have optimizations done at compile time, however these optimizations do not know how the application will be used at runtime, as such it cannot predict hot paths that should be optimized. 
+Also, as it does not have the usage data, it does not know how to optimize the code.
+Starting .NET 8 R2R code will have optimized code at compile time, but also support PGO which will based on the runtime data optimize it even further.
+![Ready to run pgo tiering](./Resources/Performance/ProfileGuidedOptimizations/Ready2Run/R2RInstrumentationFlow.png)
+**Note**: The BCL have already been precompiled with R2R. This means that it will only have impact on your own code. Also, compiling your code as R2R will have impact on the physical size of your application as the size of an assembly can grow to between two or three times a larger.
+![Impact of the ready to run feature](./Resources/Performance/ProfileGuidedOptimizations/Ready2Run/ImpactOfR2R.png)
+
+### Sources
+- [Dynamic PGO youtube video](https://www.youtube.com/watch?v=WrpYcGic9b8&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=75)
+- [ReadyToRun - MSDN ReadyToRun](https://learn.microsoft.com/en-us/dotnet/core/deploying/ready-to-run#impact-of-using-the-readytorun-feature)
 
 ## SearchValues
 Searching multiple characters inside a string via the `IndexOf` is optimized for a low amount of characters (e.g. searching for `a` or `b`), but not for an `x` amount of characters. Creating a SearchValues object with all these characters that need to be searched for will be accepted in the `IndexOf` (or others like, `LastIndexOf`) overloads and allow the `IndexOf` code to choose the most optimal way for searching based on the size of the search.
@@ -436,16 +458,5 @@ The global package folder now checks to see if the dependency of a package has p
 ![Disallow transitive package from different source](./Resources/NuGet/DisallowTransitivePackageDiffSource.png) 
 
 # TODO
-## 1
-From this: ![TODO from 1](./Resources/Todo/TodoFrom1.png)
-To this: ![TODO until 1](./Resources/Todo/TodoUntil1.png)
 
-### Source
-[Day 2 (includes all the missed sessions)](https://www.youtube.com/watch?v=vU-iZcxbDUk)
-
-## 2
-From this: ![TODO from 2](./Resources/Todo/TodoFrom2.png)
-
-## 3
-From this: ![TODO from 3](./Resources/Todo/TodoFrom3.png)
-Until this: ![TODO until 3](./Resources/Todo/TodoUntil3.png)
+From this: ![TODO from](./Resources/Todo/TodoFrom.png)
