@@ -13,6 +13,15 @@
     - [Static Server Side Rendering](#static-server-side-rendering)
     - [Enhanced navigation](#enhanced-navigation)
     - [Rendering mode](#rendering-mode)
+    - [Testing](#testing)
+      - [Playwright](#playwright)
+      - [BUnit](#bunit)
+        - [Component state](#component-state)
+        - [Component markup](#component-markup)
+    - [Custom elements](#custom-elements)
+      - [Exporting javascript components as custom elements](#exporting-javascript-components-as-custom-elements)
+    - [JavaScript projects](#javascript-projects)
+    - [Sources](#sources)
 - [Containers](#containers)
   - [Base image](#base-image)
   - [Chiseled image](#chiseled-image)
@@ -29,7 +38,7 @@
     - [Instrumentation overhead](#instrumentation-overhead)
     - [Guarded devirtualization (GDV)](#guarded-devirtualization-gdv)
       - [Ready to run (R2R) code PGO](#ready-to-run-r2r-code-pgo)
-    - [Sources](#sources)
+    - [Sources](#sources-1)
   - [SearchValues](#searchvalues)
 - [C# language](#c-language)
   - [Aliases](#aliases)
@@ -64,6 +73,8 @@
     - [Impact of **not** having a JIT](#impact-of-not-having-a-jit)
     - [Other considerations](#other-considerations)
     - [Conclusion](#conclusion)
+- [IOT](#iot)
+  - [Sources](#sources-2)
 - [Development tunnels](#development-tunnels)
 - [.NET MAUI](#net-maui)
 - [NuGet](#nuget)
@@ -73,7 +84,10 @@
   - [Package source mapping](#package-source-mapping)
     - [Automatically configure the source mapping](#automatically-configure-the-source-mapping)
     - [Disallow transitive source packages from different source](#disallow-transitive-source-packages-from-different-source)
-- [TODO](#todo)
+- [Clean architecture](#clean-architecture)
+  - [Todo](#todo)
+  - [Source](#source-2)
+- [Skipping missing sessions](#skipping-missing-sessions)
 
 # Asp.Net
 ## Middlewares
@@ -161,6 +175,48 @@ Using the rendering mode it is possible to specify which rendering mode should b
 ![Interactive components](./Resources/AspNet/Blazor/RenderingMode/InteractiveComponents.png)
 ![Auto mode](./Resources/AspNet/Blazor/RenderingMode/AutoMode.png)
 ![Setting render mode via code](./Resources/AspNet/Blazor/RenderingMode/SettingRenderModeInCode.png)
+
+### Testing
+#### Playwright
+Playwright is a testing framework for Blazor frontend components. Playwright is like cypress as it runs your Blazor components inside a separately running browser process.
+Using playwright you can test the frontend Blazor components. It is possible to stub/fake/mock the services that are injected via DI to ensure your tests have deterministic data on which they test.
+**Note**: When running Blazor WebAssembly it is not possible to replace the services via overriding the service in DI. This is because Blazor is already compiled to WebAssembly so there is essentially no DI anymore.
+![Overriding the DI](./Resources/AspNet/Blazor/Testing/Playwright/OverridingDI.png)
+![Overriding the DI part 2](./Resources/AspNet/Blazor/Testing/Playwright/OverridingDI2.png)
+
+#### BUnit
+Using BUnit it is possible to isolate tests specific for the component you want to test.
+This framework will render a specific component with specific parameters and check the behavior of the component.
+![BUnit isolated component test](./Resources/AspNet/Blazor/Testing/BUnit/IsolatedComponentTest.png)
+
+##### Component state
+It is also possible to retrieve the instance of the component and verify the state of the public properties.
+![Verify state of the component instance](./Resources/AspNet/Blazor/Testing/BUnit/ComponentInstanceProperties.png)
+
+##### Component markup
+BUnit also supports verifying the markup of your component. This is particularly useful when certain combinations of markup is required for a specific feature or when you dynamically set the markup based on a condition. Using the markup test will let you verify if the condition correctly sets the markup.
+![Verifying the markup](./Resources/AspNet/Blazor/Testing/BUnit/MarkupTesting.png)
+The markup does not need to be in the same order for the test to succeed. The test only verifies: Does the `div` apply the following markup.
+
+### Custom elements
+It is possible to register a Blazor component in ASP.NET which effectively exports the component to a component native in the web stack. This means that you could export the Blazor component and reference that exported component in HTML, JavaScript, WebForms, React, etc...
+Using the dotnet-migration tool which creates a dotnet-core app with YARP configured, you could start migrating each page to Blazor components and reference them in the `aspx` file on the old app. This means the migration can go smoothly and migrate each component separately.
+![Custom elements](./Resources/AspNet/Blazor/CustomElements/CustomElements.png)
+![Custom elements example](./Resources/AspNet/Blazor/CustomElements/Example.png)
+![Migration with YARP](./Resources/AspNet/Blazor/CustomElements/MigrateAspToBlazor.png)
+**Note**: The Blazor server needs to run so the frontend can reach that component.
+
+#### Exporting javascript components as custom elements
+Blazor can load components exported from the javascript side. This means you can mix match and create each component in the preferred language or stack and combine them all together inside Blazor.
+![Exporting a react component](./Resources/AspNet/Blazor/CustomElements/ReactComponent.png)
+![Importing a react component in Blazor](./Resources/AspNet/Blazor/CustomElements/ImportingReactComponent.png)
+
+### JavaScript projects
+Using the new JavaScript projects it is possible to create JavaScript based projects and package them as a `RazorClassLibrary` which can then be packed inside a nuget package, essentially creating JavaScript code but exposing it as Blazor code.
+![Wrapping JavaScript project as Blazor nuget package](./Resources/AspNet/Blazor/JavaScriptInterop/WrappingJavaScriptProjectAsBlazorPackage.png)
+
+### Sources
+* [Youtube video for interactivity between JavaScript and Blazor](https://www.youtube.com/watch?v=H1LlRUqj9U4&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=64)
 
 # Containers
 ## Base image
@@ -346,7 +402,7 @@ When wanting to send the requests in parallel use `HedgingHandler`. Hedging will
 ![Hedging handler](./Resources/Resilience/HttpClient/HedgingHandler.png)
 ![Different strategies](./Resources/Resilience/HttpClient/DifferentStrategies.png)
 
-The resilience handler also respects the `retry-after` header by default. This header is sent back by the server if the server has rate limiting configured (correctly). This can be turned off, if this is not the behaviour that you want.
+The resilience handler also respects the `retry-after` header by default. This header is sent back by the server if the server has rate limiting configured (correctly). This can be turned off, if this is not the behavior that you want.
 
 
 The package has support for OpenTelemetry and will trace or log data that is relevant.
@@ -363,7 +419,7 @@ This attribute can also be moved to the source generator so this configuration i
 The `required` keyword for properties is finally enforced 🥳!
 
 ## Unmapped json member handling
-Using the `JsonUnmappedMemberHandling` attribute it is possible to specify the behaviour requested for the deserialization around unmapped json members.
+Using the `JsonUnmappedMemberHandling` attribute it is possible to specify the behavior requested for the deserialization around unmapped json members.
 This means you can enforce the contract to be the same as the input and not accept unwanted properties.
 ![Json unmapped members handling](./Resources/Json/JsonUnmappedMembers.png)
 
@@ -420,6 +476,18 @@ It is a tradeoff. When running short-lived applications that will start a lot to
 However when you have code which continuously runs and has a lot of throughput it might be better to compile it to JIT as it can perform code optimizations (or tiered compilation (Dynamic PGO)) on hot paths. Also, when you need to use features such as `Reflection.Emit` you would have to go with JIT either way.
 **Note**: `Expression.Compile` will work in AOT, but it will have reduced performance 
 
+# IOT
+Using the .NET nanoFramework it is possible to run a limited version of C# on a list of supported microcontrollers!
+* Espressif esp32 (xtensa)
+* Arduino
+
+## Sources
+* [Youtube video](https://www.youtube.com/watch?v=zwkspYxtFAE&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=60)
+  * Full chain from a microcontroller receiving a message, sending it to the raspberry pi for processing.
+* [Sample project](https://github.com/burkenyo/burkenyo.iot)
+* [MSDN IOT](https://dotnet.microsoft.com/en-us/apps/iot)
+
+
 # Development tunnels
 Hot reload is now possible for dev tunnels 🥳! This means that you don't need to redeploy your dev tunnel app each time you make changes to it.
 
@@ -457,6 +525,15 @@ This is useful for security reasons as this prevents the possibility of an malic
 The global package folder now checks to see if the dependency of a package has previously already been installed (is it in the cache) and if it has been installed, if the cached variant is from the configured source. If not it will disallow that package.
 ![Disallow transitive package from different source](./Resources/NuGet/DisallowTransitivePackageDiffSource.png) 
 
-# TODO
+# Clean architecture
+Using the `clean-arch` template you can start working on a clean architecture code sample.
 
-From this: ![TODO from](./Resources/Todo/TodoFrom.png)
+## Todo
+Verify with colleagues if this is valid or not.
+
+## Source
+[Youtube video](https://www.youtube.com/watch?v=yF9SwL0p0Y0&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=68)
+
+# Skipping missing sessions
+Sessions inside the `Premier Bonus` section as well as sessions that ran after [Clean Architecture with ASP.NET Core 8](https://www.youtube.com/watch?v=yF9SwL0p0Y0&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=69) session will be skipped.
+The reason for this is because I have evaluated them to have little additional value over the already viewed sessions. This in the combination with the fact that watch each session back takes a considerable amount of time I have chosen to no longer watch them back.
