@@ -88,6 +88,7 @@
   - [Todo](#todo)
   - [Source](#source-2)
 - [Skipping missing sessions](#skipping-missing-sessions)
+- [Sources](#sources-3)
 
 # Asp.Net
 ## Middlewares
@@ -537,3 +538,7 @@ Verify with colleagues if this is valid or not.
 # Skipping missing sessions
 Sessions inside the `Premier Bonus` section as well as sessions that ran after [Clean Architecture with ASP.NET Core 8](https://www.youtube.com/watch?v=yF9SwL0p0Y0&list=PLdo4fOcmZ0oULyHSPBx-tQzePOYlhvrAU&index=69) session will be skipped.
 The reason for this is because I have evaluated them to have little additional value over the already viewed sessions. This in the combination with the fact that watch each session back takes a considerable amount of time I have chosen to no longer watch them back.
+
+# Sources
+* [Dotnet conf 2023 - youtube playlist](https://www.youtube.com/@dotnet/playlists)
+* [Dotnet conf 2023 - agenda](https://www.dotnetconf.net/agenda)
