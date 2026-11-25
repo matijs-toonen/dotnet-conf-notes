@@ -20,6 +20,12 @@
   - [dotnet watch](#dotnet-watch)
   - [MAUI Labs](#maui-labs)
 - [Runtime Async](#runtime-async)
+- [System.Text.Json](#systemtextjson)
+  - [Union types](#union-types)
+  - [Closed types](#closed-types)
+  - [Prefered way](#prefered-way)
+  - [Json converters](#json-converters)
+  - [Naming policy](#naming-policy)
 
 # C#
 ## Unions
@@ -143,3 +149,51 @@ public async Task Await()
 As this removes layers of the call-stack, this also reduces the cost for exception bubbling and removes unnecessary allocations:
 ![Runtime async exception handling perf](./Resources/Dotnet/RuntimeAsync/ExceptionHandlingThroughput.png)
 ![Runtime async exception handling memory](./Resources/Dotnet/RuntimeAsync/ExceptionHandlingAllocation.png)
+// TODO
+
+# System.Text.Json
+## Union types
+Supports union types:
+```csharp
+Either value1 = 200;
+JsonSerializer.Serialize(value1); // 200
+
+Either value1 = "ok";
+JsonSerializer.Serialize(value2); // "ok"
+
+Either value3 = new Person(Name: "Alice");
+JsonSerializer.Serialize(value3); // {"Name": "Alice"}
+
+union Either(int, string, Person);
+```
+
+For deserialization it is possible to have multiple different types in an array, then deserialize to an array of the union, it will find the correct type in the union and bind to that.
+
+If the json type for the C# type is the same for multiple types in the union, then it will fail:
+![Deserialization fails union restriction](./Resources/Json/union-restrictions.png)
+
+To solve this we have union type classifiers in which the application needs to manage the way it is deserialized manually:
+![Union type classifiers](./Resources/Json/union-type-classifiers.png)
+
+There are existing classifiers which can automatically help based on the structure of the union type:
+![Built-in structural classifier](./Resources/Json/structural-classifier.png)
+![Structural classifier example](./Resources/Json/structural-classifier-example.png)
+
+If the properties that are for the separate types omit those properties then it becomes ambigious again and is rejected e.g. `{"Name": "Fido"}`.
+
+## Closed types
+When working with a `closed` type the amount of derived types are determined at compile time which removes the need to specify the `JsonDerivedType` for all not annotated types (as the types which are supported are already known).
+Simply using the `JsonPolymorphic(InferClosedTypePolymorphism = true)` enables this:
+![Infer closed type polymorphism](./Resources/Json/infer-closed-type-polymorphism.png)
+
+## Prefered way
+Prefer closed classes over union types because of guarantees around type properties (via the $type property).
+Only use union types if you don't own the schema and the schema specifies it as is.
+
+## Json converters
+Now possible to use a generic type converter in json
+![Generic type converter](./Resources/Json/generic-converter.png)
+
+## Naming policy
+Now possible to override the policy on property level
+![Property level naming policy](./Resources/Json/naming-policy.png)
