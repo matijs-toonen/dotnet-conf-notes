@@ -26,6 +26,11 @@
   - [Prefered way](#prefered-way)
   - [Json converters](#json-converters)
   - [Naming policy](#naming-policy)
+- [Blazor](#blazor)
+  - [CacheView](#cacheview)
+  - [Persistent state](#persistent-state)
+  - [AutoPause](#autopause)
+    - [For interactive data components](#for-interactive-data-components)
 
 # C#
 ## Unions
@@ -197,3 +202,27 @@ Now possible to use a generic type converter in json
 ## Naming policy
 Now possible to override the policy on property level
 ![Property level naming policy](./Resources/Json/naming-policy.png)
+
+# Blazor
+## CacheView
+new `CacheView` component which allows caching on a specific part of rendered data (not the entire html response from the server side rendered server).
+
+Existing `@attribute [OutputCache]` still works, but is meant for the entire html response.
+
+## Persistent state
+Using the existing `[PersistentState]` attribute now even works if the server is down (for example when doing multiple releases).
+When the instance is back up, the client side will now rehydrate the page using the persisted state.
+
+## AutoPause
+Using the newly created `AutoPause` package will allow the server to release circuits when the browser tab is hidden.
+```csharp
+app.MapRazorComponents<App>()
+  .AddInteractiveServerSideRenderingMode()
+  .WithBrowserOptions(options => 
+    options.AddAutoPause(pause => 
+      pause.HiddenDelay = TimeSpan.FromSeconds(20)))
+```
+
+### For interactive data components
+If data is important between connections (so if the circuit is released, after it reconnects the state is rehydrated), then make sure the component is annotated with the `[PersistentState]` attribute.
+Otherwise the data will be lost after (in this case 20 seconds) of being hidden as the reconnection doesn't include the data required to rehydrate the component.
